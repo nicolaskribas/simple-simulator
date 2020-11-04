@@ -6,4 +6,5 @@
 
 ## Execution
 In the root of the project run ` mvn package `, you will get a .jar in the target/ folder.
+
 Execute the .jar file by running ` java -jar  simple-simulator-version.jar `.
