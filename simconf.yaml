@@ -1,0 +1,29 @@
+temporaryUnitGenerators:
+  - name: entrada
+    observations: [3, 5, 8, 9, 11, 12, 14, 17, 18, 21]
+    numberOfClasses: 4
+    numberOfSlaToGenerate: 10
+    next: recepcao
+
+serviceCenters:
+  - name: recepcao
+    observations: [11, 8, 7, 12, 10, 9, 8, 10, 7, 4, 4, 2, 3, 2, 4, 3, 4, 3, 2]
+    numberOfClasses: 4
+    next: saida_ou_medicos
+
+  - name: medicos
+    observations: [23, 15, 18, 17, 22, 25, 21, 22, 16, 20]
+    numberOfClasses: 4
+    next: recepcao
+
+temporaryUnitRouters:
+  - name: saida_ou_medicos
+    next:
+      - name: saida
+        chance: 30
+
+      - name: medicos
+        chance: 70
+
+temporaryUnitExits:
+  - name: saida
