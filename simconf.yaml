@@ -1,29 +1,33 @@
-temporaryUnitGenerators:
+generatorsConfigurations:
   - name: entrada
-    observations: [3, 5, 8, 9, 11, 12, 14, 17, 18, 21]
+    samples: [3, 5, 8, 9, 11, 12, 14, 17, 18, 21]
     numberOfClasses: 4
-    numberOfSlaToGenerate: 10
-    next: recepcao
+    numberOfTemporaryUnitsToGenerate: 10
+    nextComponentName: recepcao
 
-serviceCenters:
+serviceCentersConfigurations:
   - name: recepcao
-    observations: [11, 8, 7, 12, 10, 9, 8, 10, 7, 4, 4, 2, 3, 2, 4, 3, 4, 3, 2]
+    numberOfAttendants: 2
+    samples: [11, 8, 7, 12, 10, 9, 8, 10, 7, 4, 4, 2, 3, 2, 4, 3, 4, 3, 2]
     numberOfClasses: 4
-    next: saida_ou_medicos
+    nextComponentName: saida_ou_medicos
 
   - name: medicos
-    observations: [23, 15, 18, 17, 22, 25, 21, 22, 16, 20]
+    numberOfAttendants: 3
+    samples: [23, 15, 18, 17, 22, 25, 21, 22, 16, 20]
     numberOfClasses: 4
-    next: recepcao
+    nextComponentName: recepcao
 
-temporaryUnitRouters:
+routersConfigurations:
   - name: saida_ou_medicos
-    next:
+    nextComponentsProbabilities:
       - name: saida
-        chance: 30
+        probability: 0.3
 
       - name: medicos
-        chance: 70
+        probability: 0.7
 
-temporaryUnitExits:
+exitsConfigurations:
   - name: saida
+
+maxSimulationTime: 480

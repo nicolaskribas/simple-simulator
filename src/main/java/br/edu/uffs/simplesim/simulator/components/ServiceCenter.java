@@ -1,42 +1,44 @@
 package br.edu.uffs.simplesim.simulator.components;
 
-import java.util.List;
+import br.edu.uffs.simplesim.simulator.components.configuration.ServiceCenterConfiguration;
+import br.edu.uffs.simplesim.simulator.montecarlo.MonteCarlo;
 
-public class ServiceCenter {
-    private String name;
-    private List<Integer> observations;
-    private int numberOfClasses;
-    private String next;
+import java.util.*;
 
-    public String getName() {
-        return name;
+public class ServiceCenter extends Component implements EventExecutor {
+    public static final Integer INFINITE_NUMBER_OF_ATTENDANTS = -1;
+
+    private final String nextComponentName;
+    private final Integer numberOfAttendants;
+    private final MonteCarlo monteCarlo;
+    private final Queue<Attendant> attendantsQueue = new PriorityQueue<>();
+
+    public ServiceCenter(ServiceCenterConfiguration serviceCenterConfiguration) {
+        super.setName(serviceCenterConfiguration.getName());
+        nextComponentName = serviceCenterConfiguration.getNextComponentName();
+        numberOfAttendants = serviceCenterConfiguration.getNumberOfAttendants();
+        monteCarlo = new MonteCarlo(serviceCenterConfiguration.getSamples(), serviceCenterConfiguration.getNumberOfClasses());
+        for(int i = 1; i <= numberOfAttendants; i++){
+            attendantsQueue.add(new Attendant(i));
+        }
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public Optional<Event> execute(Event event) {
+        Attendant attendant = attendantsQueue.poll();
+        Double attendanceStartTime = Math.max(attendant.getLastAttendanceEndTime(), event.getTime());
+        Double attendanceTotalTime = monteCarlo.generateRandomSample();
+        Double attendanceEndTime = attendanceStartTime + attendanceTotalTime;
+
+        if(numberOfAttendantsIsNotInfinite())
+            attendant.setLastAttendanceEndTime(attendanceEndTime);
+
+        attendantsQueue.add(attendant);
+        Event nextEvent = new Event(attendanceEndTime, nextComponentName);
+        return Optional.of(nextEvent);
     }
 
-    public List<Integer> getObservations() {
-        return observations;
-    }
-
-    public void setObservations(List<Integer> observations) {
-        this.observations = observations;
-    }
-
-    public int getNumberOfClasses() {
-        return numberOfClasses;
-    }
-
-    public void setNumberOfClasses(int numberOfClasses) {
-        this.numberOfClasses = numberOfClasses;
-    }
-
-    public String getNext() {
-        return next;
-    }
-
-    public void setNext(String next) {
-        this.next = next;
+    private boolean numberOfAttendantsIsNotInfinite() {
+        return !numberOfAttendants.equals(INFINITE_NUMBER_OF_ATTENDANTS);
     }
 }
