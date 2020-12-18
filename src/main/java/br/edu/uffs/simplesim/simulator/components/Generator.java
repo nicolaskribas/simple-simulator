@@ -23,8 +23,14 @@ public class Generator extends Component {
     public List<Event> generateEvents() {
         List<Event> generatedEvents = new ArrayList<>();
         for (int i = 0; i < numberOfTemporaryUnitsToGenerate; i++) {
-            generatedEvents.add(new Event(monteCarlo.generateRandomSample(), nextComponentName));
+            Event event = new Event(monteCarlo.generateRandomSample(), nextComponentName);
+            generatedEvents.add(event);
         }
         return generatedEvents;
+    }
+
+    @Override
+    public String getStatistics() {
+        return "TODO";
     }
 }

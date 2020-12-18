@@ -5,7 +5,7 @@ import br.edu.uffs.simplesim.simulator.components.configuration.ServiceCenterCon
 import br.edu.uffs.simplesim.simulator.components.configuration.ExitConfiguration;
 import br.edu.uffs.simplesim.simulator.components.configuration.GeneratorConfiguration;
 import br.edu.uffs.simplesim.simulator.components.configuration.RouterConfiguration;
-import br.edu.uffs.simplesim.simulator.configuration.*;
+import br.edu.uffs.simplesim.simulator.configurationbeans.*;
 
 import java.util.*;
 
@@ -29,9 +29,9 @@ public class Simulator {
         exits = createTemporaryUnitExits(configuration.getExitsConfigurations());
 
         eventExecutorsMapping = new TreeMap<>();
-        for(ServiceCenter serviceCenter: serviceCenters) eventExecutorsMapping.put(serviceCenter.getName(), serviceCenter);
-        for(Router router : routers) eventExecutorsMapping.put(router.getName(), router);
-        for(Exit exit : exits) eventExecutorsMapping.put(exit.getName(), exit);
+        for (ServiceCenter serviceCenter : serviceCenters) eventExecutorsMapping.put(serviceCenter.getName(), serviceCenter);
+        for (Router router : routers) eventExecutorsMapping.put(router.getName(), router);
+        for (Exit exit : exits) eventExecutorsMapping.put(exit.getName(), exit);
     }
 
     private List<Exit> createTemporaryUnitExits(List<ExitConfiguration> temporaryUnitExitsConfigurations) {
@@ -96,8 +96,12 @@ public class Simulator {
     }
 
     public String getStatisticsAsString() {
-        String statistics = "aaa";
+        String statistics = "";
 
+        for (Generator generator : generators) statistics += generator.getStatistics() + '\n';
+        for (ServiceCenter serviceCenter : serviceCenters) statistics += serviceCenter.getStatistics() + '\n';
+        for (Router router : routers) statistics += router.getStatistics() + '\n';
+        for (Exit exit: exits) statistics += exit.getStatistics() + '\n';
 
         return statistics;
     }

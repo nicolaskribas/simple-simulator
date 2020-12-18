@@ -1,7 +1,7 @@
 package br.edu.uffs.simplesim.simulator.components;
 
 import br.edu.uffs.simplesim.simulator.components.configuration.RouterConfiguration;
-import br.edu.uffs.simplesim.simulator.configuration.NextComponentProbability;
+import br.edu.uffs.simplesim.simulator.configurationbeans.NextComponentProbability;
 import br.edu.uffs.simplesim.simulator.montecarlo.Class;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class Router extends Component implements EventExecutor {
             Long frequencyAsLong = Math.round(nextComponentProbability.getProbability() * 100);
             int frequency = frequencyAsLong.intValue();
             cumulativeFrequency += frequency;
-            Class<String> aClass = new Class<String>(nextComponentProbability.getName(), frequency, cumulativeFrequency);
+            Class<String> aClass = new Class<>(nextComponentProbability.getName(), frequency, cumulativeFrequency);
             classes.add(aClass);
         }
     }
@@ -33,13 +33,17 @@ public class Router extends Component implements EventExecutor {
     public Optional<Event> execute(Event event) {
         int randomInteger = random.nextInt(cumulativeFrequency) + 1;
 
-        System.out.println("Random: "+ randomInteger);
-        for(Class<String> aClass : classes){
-            if(randomInteger <= aClass.getCumulativeFrequency()){
+        for (Class<String> aClass : classes) {
+            if (randomInteger <= aClass.getCumulativeFrequency()) {
                 Event nextEvent = new Event(event.getTime(), aClass.getMidpoint());
                 return Optional.of(nextEvent);
             }
         }
         return Optional.empty();
+    }
+
+    @Override
+    public String getStatistics() {
+        return "TODO";
     }
 }

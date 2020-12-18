@@ -1,6 +1,6 @@
 package br.edu.uffs.simplesim.simulator.components.configuration;
 
-import br.edu.uffs.simplesim.simulator.configuration.NextComponentProbability;
+import br.edu.uffs.simplesim.simulator.configurationbeans.NextComponentProbability;
 
 import java.util.List;
 

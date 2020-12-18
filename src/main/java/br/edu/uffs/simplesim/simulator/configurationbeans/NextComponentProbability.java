@@ -1,4 +1,4 @@
-package br.edu.uffs.simplesim.simulator.configuration;
+package br.edu.uffs.simplesim.simulator.configurationbeans;
 
 public class NextComponentProbability {
     private String name;

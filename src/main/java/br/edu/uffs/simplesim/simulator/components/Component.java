@@ -11,4 +11,6 @@ public abstract class Component {
     public final void setName(String name) {
         this.name = name;
     }
+
+    public abstract String getStatistics();
 }

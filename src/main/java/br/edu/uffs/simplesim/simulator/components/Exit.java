@@ -11,7 +11,11 @@ public class Exit extends Component implements EventExecutor {
 
     @Override
     public Optional<Event> execute(Event event) {
-        System.out.println("Saiu"); //TODO
         return Optional.empty(); // Always return empty because the temporary unit exited the simulation
+    }
+
+    @Override
+    public String getStatistics() {
+        return "TODO";
     }
 }

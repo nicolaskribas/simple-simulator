@@ -1,4 +1,4 @@
-package br.edu.uffs.simplesim.simulator.configuration;
+package br.edu.uffs.simplesim.simulator.configurationbeans;
 
 import br.edu.uffs.simplesim.simulator.components.configuration.ServiceCenterConfiguration;
 import br.edu.uffs.simplesim.simulator.components.configuration.ExitConfiguration;

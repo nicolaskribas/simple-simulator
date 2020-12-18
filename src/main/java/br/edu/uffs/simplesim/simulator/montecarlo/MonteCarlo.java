@@ -9,8 +9,13 @@ public class MonteCarlo {
     private Integer cumulativeFrequency;
     private final List<Class<Double>> classes = new ArrayList<>();
     private final Random random = new Random();
+    private Double cumulativeGeneratedValues;
+    private int numberOfGeneratedValues;
 
     public MonteCarlo(List<Double> samples, Integer numberOfClasses) {
+        cumulativeGeneratedValues = 0.0;
+        numberOfGeneratedValues = 0;
+
         Collections.sort(samples);
         double lowestSample = samples.get(0);
         double highestSample = samples.get(samples.size() - 1);
@@ -42,8 +47,20 @@ public class MonteCarlo {
         int randomInteger = random.nextInt(cumulativeFrequency) + 1;
 
         for(Class<Double> aClass : classes){
-            if(randomInteger <= aClass.getCumulativeFrequency()) return aClass.getMidpoint();
+            if(randomInteger <= aClass.getCumulativeFrequency()){
+                addToCumulativeGeneratedValues(aClass.getMidpoint());
+                return aClass.getMidpoint();
+            }
         }
         throw new RuntimeException("Invalid random number, this should never happen!");
+    }
+
+    private void addToCumulativeGeneratedValues(Double midpoint) {
+        numberOfGeneratedValues += 1;
+        cumulativeGeneratedValues += midpoint;
+    }
+
+    public Double getAverageGeneratedValue(){
+        return cumulativeGeneratedValues/numberOfGeneratedValues;
     }
 }
