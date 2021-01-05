@@ -1,6 +1,6 @@
-package br.edu.uffs.simplesim.simulator.components;
+package br.edu.uffs.simplesim.simulator.components.configuration;
 
-public class TemporaryUnitExit {
+public class ExitConfiguration {
     private String name;
 
     public String getName() {

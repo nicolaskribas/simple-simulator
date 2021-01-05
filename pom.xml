@@ -71,7 +71,7 @@
                     <configuration>
                         <archive>
                             <manifest>
-                                <mainClass>br.edu.uffs.simplesim.App</mainClass>
+                                <mainClass>br.edu.uffs.simplesim.Simplesim</mainClass>
                             </manifest>
                         </archive>
                     </configuration>

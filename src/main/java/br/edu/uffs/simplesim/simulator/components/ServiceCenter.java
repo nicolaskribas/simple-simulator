@@ -1,42 +1,53 @@
 package br.edu.uffs.simplesim.simulator.components;
 
-import java.util.List;
+import br.edu.uffs.simplesim.simulator.components.configuration.ServiceCenterConfiguration;
+import br.edu.uffs.simplesim.simulator.montecarlo.MonteCarlo;
+import br.edu.uffs.simplesim.simulator.components.Attendant.Type;
 
-public class ServiceCenter {
-    private String name;
-    private List<Integer> observations;
-    private int numberOfClasses;
-    private String next;
+import java.util.*;
 
-    public String getName() {
-        return name;
+public class ServiceCenter extends Component implements EventExecutor {
+    public static final Integer INFINITE_NUMBER_OF_ATTENDANTS = -1;
+
+    private final String nextComponentName;
+    private final Integer numberOfAttendants;
+    private final MonteCarlo monteCarlo;
+    private final Queue<Attendant> attendantsQueue;
+
+    public ServiceCenter(ServiceCenterConfiguration serviceCenterConfiguration) {
+        super.setName(serviceCenterConfiguration.getName());
+        nextComponentName = serviceCenterConfiguration.getNextComponentName();
+        numberOfAttendants = serviceCenterConfiguration.getNumberOfAttendants();
+        monteCarlo = new MonteCarlo(serviceCenterConfiguration.getSamples(), serviceCenterConfiguration.getNumberOfClasses());
+        attendantsQueue = createAttendantsQueue(serviceCenterConfiguration.getNumberOfAttendants());
     }
 
-    public void setName(String name) {
-        this.name = name;
+    private Queue<Attendant> createAttendantsQueue(Integer numberOfAttendants) {
+        Queue<Attendant> queue = new PriorityQueue<>();
+
+        if(numberOfAttendants == INFINITE_NUMBER_OF_ATTENDANTS){
+            queue.add(new Attendant(1, Type.INFINITE));
+        }else{
+            for(Integer id = 1; id <= numberOfAttendants; id++){
+                queue.add(new Attendant(id, Type.UNITARY));
+            }
+        }
+        return queue;
     }
 
-    public List<Integer> getObservations() {
-        return observations;
+    @Override
+    public Optional<Event> execute(Event event) {
+        Attendant attendant = attendantsQueue.poll();
+        Double attendanceTime = monteCarlo.generateRandomSample();
+        Double attendanceEndTime = attendant.attend(event, attendanceTime);
+        attendantsQueue.add(attendant);
+
+        Event nextEvent = new Event(attendanceEndTime, nextComponentName);
+        return Optional.of(nextEvent);
     }
 
-    public void setObservations(List<Integer> observations) {
-        this.observations = observations;
-    }
-
-    public int getNumberOfClasses() {
-        return numberOfClasses;
-    }
-
-    public void setNumberOfClasses(int numberOfClasses) {
-        this.numberOfClasses = numberOfClasses;
-    }
-
-    public String getNext() {
-        return next;
-    }
-
-    public void setNext(String next) {
-        this.next = next;
+    @Override
+    public String getStatistics() {
+        return monteCarlo.getAverageGeneratedValue() + "\n";
     }
 }
