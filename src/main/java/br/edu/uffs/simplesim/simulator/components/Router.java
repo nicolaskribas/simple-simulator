@@ -17,7 +17,7 @@ public class Router extends Component implements EventExecutor {
     private final Random random = new Random();
 
     public Router(RouterConfiguration routerConfiguration) {
-        super.setName(routerConfiguration.getName());
+        setName(routerConfiguration.getName());
 
         cumulativeFrequency = 0;
         for (NextComponentProbability nextComponentProbability : routerConfiguration.getNextComponentsProbabilities()) {
@@ -35,7 +35,7 @@ public class Router extends Component implements EventExecutor {
 
         for (Class<String> aClass : classes) {
             if (randomInteger <= aClass.getCumulativeFrequency()) {
-                Event nextEvent = new Event(event.getTime(), aClass.getMidpoint());
+                Event nextEvent = new Event(aClass.getMidpoint(), event.getTime(), event.getTemporaryEntity());
                 return Optional.of(nextEvent);
             }
         }

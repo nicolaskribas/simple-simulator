@@ -17,7 +17,7 @@ public class Simplesim {
         Configuration configuration = getConfigurationFromYamlFile();
         Simulator simulator = new Simulator(configuration);
         simulator.simulate();
-        writeResultsOnFile(simulator.getStatisticsAsString());
+        writeResultsOnFile(simulator.getMetricsAsString());
     }
 
     public static Configuration getConfigurationFromYamlFile() {
@@ -28,14 +28,11 @@ public class Simplesim {
     }
 
     public static Reader getConfigurationFileReader() {
-        Reader reader = null;
         try {
-            reader = new FileReader(CONFIGURATION_FILE_NAME);
+            return new FileReader(CONFIGURATION_FILE_NAME);
         } catch (FileNotFoundException exception) {
-            System.out.println("Configuration file not found, exiting program!");
-            System.exit(-1);
+            throw new RuntimeException("Configuration file not found!");
         }
-        return reader;
     }
 
     private static void writeResultsOnFile(String results) {
@@ -44,8 +41,7 @@ public class Simplesim {
             writer.write(results);
             writer.close();
         } catch (IOException exception) {
-            System.out.println("Error writing the simulation result to the file, exiting program!");
-            System.exit(-1);
+            throw new RuntimeException("Error writing the simulation result to the file!");
         }
     }
 }

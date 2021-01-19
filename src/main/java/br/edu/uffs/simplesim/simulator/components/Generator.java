@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Generator extends Component {
+    private static int temporaryEntitiesGenerated = 0;
 
     private final String nextComponentName;
     private final Integer numberOfTemporaryUnitsToGenerate;
@@ -14,19 +15,29 @@ public class Generator extends Component {
     private final MonteCarlo monteCarlo;
 
     public Generator(GeneratorConfiguration temporaryUnitGeneratorsConfigurations) {
-        super.setName(temporaryUnitGeneratorsConfigurations.getName());
+        setName(temporaryUnitGeneratorsConfigurations.getName());
         nextComponentName = temporaryUnitGeneratorsConfigurations.getNextComponentName();
         monteCarlo = new MonteCarlo(temporaryUnitGeneratorsConfigurations.getSamples(), temporaryUnitGeneratorsConfigurations.getNumberOfClasses());
         numberOfTemporaryUnitsToGenerate = temporaryUnitGeneratorsConfigurations.getNumberOfTemporaryUnitsToGenerate();
     }
 
-    public List<Event> generateEvents() {
+    public List<Event> generateArrivalEvents() {
         List<Event> generatedEvents = new ArrayList<>();
         for (int i = 0; i < numberOfTemporaryUnitsToGenerate; i++) {
-            Event event = new Event(monteCarlo.generateRandomSample(), nextComponentName);
-            generatedEvents.add(event);
+            generatedEvents.add(generateNewArrivalEvent());
         }
         return generatedEvents;
+    }
+
+    private Event generateNewArrivalEvent(){
+        Double arrivalTime = monteCarlo.generateRandomSample();
+        TemporaryEntity temporaryEntity = new TemporaryEntity(nextTemporaryEntityId(), arrivalTime);
+        return new Event(nextComponentName, arrivalTime, temporaryEntity);
+    }
+
+    private int nextTemporaryEntityId() {
+        temporaryEntitiesGenerated += 1;
+        return temporaryEntitiesGenerated;
     }
 
     @Override

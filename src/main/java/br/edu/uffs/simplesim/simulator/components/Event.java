@@ -3,11 +3,13 @@ package br.edu.uffs.simplesim.simulator.components;
 public class Event implements Comparable<Event> {
     private Double time;
     private String eventExecutorInChargeName;
+    private TemporaryEntity temporaryEntity;
 
 
-    public Event(Double time, String eventExecutorInChargeName) {
+    public Event(String eventExecutorInChargeName, Double time, TemporaryEntity temporaryEntity) {
         this.time = time;
         this.eventExecutorInChargeName = eventExecutorInChargeName;
+        this.temporaryEntity = temporaryEntity;
     }
 
     @Override
@@ -26,4 +28,7 @@ public class Event implements Comparable<Event> {
         return eventExecutorInChargeName;
     }
 
+    public TemporaryEntity getTemporaryEntity() {
+        return temporaryEntity;
+    }
 }

@@ -91,18 +91,18 @@ public class Simulator {
 
     private void generateTemporaryUnitsEvents() {
         for (Generator generator : generators) {
-            eventsQueue.addAll(generator.generateEvents());
+            eventsQueue.addAll(generator.generateArrivalEvents());
         }
     }
 
-    public String getStatisticsAsString() {
-        String statistics = "";
+    public String getMetricsAsString() {
+        String metrics = "";
 
-        for (Generator generator : generators) statistics += generator.getStatistics() + '\n';
-        for (ServiceCenter serviceCenter : serviceCenters) statistics += serviceCenter.getStatistics() + '\n';
-        for (Router router : routers) statistics += router.getStatistics() + '\n';
-        for (Exit exit: exits) statistics += exit.getStatistics() + '\n';
+        for (Generator generator : generators) metrics += generator.getStatistics() + '\n';
+        for (ServiceCenter serviceCenter : serviceCenters) metrics += serviceCenter.getStatistics() + '\n';
+        for (Router router : routers) metrics += router.getStatistics() + '\n';
+        for (Exit exit: exits) metrics += exit.getStatistics() + '\n';
 
-        return statistics;
+        return metrics;
     }
 }
