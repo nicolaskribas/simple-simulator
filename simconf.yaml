@@ -1,20 +1,20 @@
 generatorsConfigurations:
   - name: entrada
-    samples: [3, 5, 8, 9, 11, 12, 14, 17, 18, 21]
-    numberOfClasses: 4
-    numberOfTemporaryUnitsToGenerate: 10
+    samples: [157, 94, 150, 413, 95, 101, 56, 352, 230, 323, 16, 311, 98, 467, 330, 277, 457, 3, 276, 285, 246, 160, 390, 230, 64, 233, 181, 316, 325, 271]
+    numberOfClasses: 10
+    numberOfTemporaryUnitsToGenerate: 60
     nextComponentName: recepcao
 
 serviceCentersConfigurations:
   - name: recepcao
     numberOfAttendants: 2
-    samples: [11, 8, 7, 12, 10, 9, 8, 10, 7, 4, 4, 2, 3, 2, 4, 3, 4, 3, 2]
+    samples: [1, 2, 7, 6, 10, 12, 4, 3, 1, 4, 4, 2, 3, 2, 4, 3, 4, 3, 2]
     numberOfClasses: 4
     nextComponentName: saida_ou_medicos
 
   - name: medicos
     numberOfAttendants: 3
-    samples: [23, 15, 18, 17, 22, 25, 21, 22, 16, 20]
+    samples: [34, 31, 18, 22, 24, 17, 19, 23, 21, 35]
     numberOfClasses: 4
     nextComponentName: recepcao
 
@@ -22,12 +22,12 @@ routersConfigurations:
   - name: saida_ou_medicos
     nextComponentsProbabilities:
       - name: saida
-        probability: 0.3
+        probability: 0.5
 
       - name: medicos
-        probability: 0.7
+        probability: 0.5
 
 exitsConfigurations:
   - name: saida
 
-maxSimulationTime: 480
+maxSimulationTime: 30000000

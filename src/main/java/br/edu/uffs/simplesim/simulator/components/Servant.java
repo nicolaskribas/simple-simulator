@@ -3,6 +3,9 @@ package br.edu.uffs.simplesim.simulator.components;
 public class Servant extends Component implements Comparable<Servant> {
 
     private Double lastServiceEndTime;
+
+
+
     private Double idleTime;
 
     public Servant(String name) {
@@ -23,16 +26,14 @@ public class Servant extends Component implements Comparable<Servant> {
 
     @Override
     public String getStatistics() {
-        String statistics = "";
-
-        statistics += getName() + '\n';
-        statistics += "Idle time: " + idleTime + '\n';
-
-        return statistics;
+        return "(" + getName() + " - " + idleTime + ")";
     }
 
     public Double getLastServiceEndTime() {
         return lastServiceEndTime;
     }
 
+    public Double getIdleTime() {
+        return idleTime;
+    }
 }

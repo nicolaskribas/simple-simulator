@@ -17,7 +17,7 @@ public class Simplesim {
         Configuration configuration = getConfigurationFromYamlFile();
         Simulator simulator = new Simulator(configuration);
         simulator.simulate();
-        writeResultsOnFile(simulator.getMetricsAsString());
+        writeResultsOnFile(simulator.getStatisticsAsString());
     }
 
     public static Configuration getConfigurationFromYamlFile() {

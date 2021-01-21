@@ -95,14 +95,12 @@ public class Simulator {
         }
     }
 
-    public String getMetricsAsString() {
-        String metrics = "";
+    public String getStatisticsAsString() {
+        String statistics = "";
 
-        for (Generator generator : generators) metrics += generator.getStatistics() + '\n';
-        for (ServiceCenter serviceCenter : serviceCenters) metrics += serviceCenter.getStatistics() + '\n';
-        for (Router router : routers) metrics += router.getStatistics() + '\n';
-        for (Exit exit: exits) metrics += exit.getStatistics() + '\n';
+        for (ServiceCenter serviceCenter : serviceCenters) statistics += serviceCenter.getStatistics() + '\n';
+        for (Exit exit: exits) statistics += exit.getStatistics() + '\n';
 
-        return metrics;
+        return statistics;
     }
 }

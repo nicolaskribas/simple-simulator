@@ -15,6 +15,7 @@ public class ServiceCenter extends Component implements EventExecutor {
 
     private int eventsExecuted;
     private Double cumulativeWaitingTime;
+    private Double maxWaitingTime;
 
     public ServiceCenter(ServiceCenterConfiguration serviceCenterConfiguration) {
         setName(serviceCenterConfiguration.getName());
@@ -24,6 +25,7 @@ public class ServiceCenter extends Component implements EventExecutor {
         servantsQueue = createServantsQueue(serviceCenterConfiguration.getNumberOfAttendants());
         eventsExecuted = 0;
         cumulativeWaitingTime = 0.0;
+        maxWaitingTime = 0.0;
     }
 
     private Queue<Servant> createServantsQueue(Integer numberOfServants) {
@@ -67,16 +69,38 @@ public class ServiceCenter extends Component implements EventExecutor {
     private void addWaitToStatistics(double waitingTime) {
         cumulativeWaitingTime += waitingTime;
         eventsExecuted += 1;
+        maxWaitingTime = Math.max(maxWaitingTime, waitingTime);
     }
 
     @Override
     public String getStatistics() {
+        System.out.println(getName() + "Events executed: " + eventsExecuted);
+
         String statistics = "";
 
         statistics += '*' + getName() + '*' + '\n';
         statistics += "Average service time: " + monteCarlo.getAverageGeneratedValue() + '\n';
-        statistics += "Average wait time: " + cumulativeWaitingTime / eventsExecuted + '\n';
+        statistics += "Average waiting time: " + cumulativeWaitingTime / eventsExecuted + '\n';
+        statistics += "Max waiting time: " + maxWaitingTime + '\n';
+        statistics += "Idle time of each servant: (id of servant - idle time)" + getIdleTimeAsString() + '\n';
+        statistics += "Average idle time of servants: " + getAverageIdleTime() + '\n';
 
         return statistics;
+    }
+
+
+
+    private String getIdleTimeAsString() {
+        String idleTimes = "";
+        for (Servant servant : servantsQueue)
+            idleTimes += " | " + servant.getStatistics();
+
+        return idleTimes;
+    }
+    private Double getAverageIdleTime() {
+        Double idleTimeSum = 0.0;
+        for(Servant servant : servantsQueue)
+            idleTimeSum += servant.getIdleTime();
+        return idleTimeSum / servantsQueue.size();
     }
 }
