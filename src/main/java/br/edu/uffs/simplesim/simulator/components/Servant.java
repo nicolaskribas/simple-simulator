@@ -1,9 +1,10 @@
 package br.edu.uffs.simplesim.simulator.components;
 
+import br.edu.uffs.simplesim.simulator.utils.Utils;
+
 public class Servant extends Component implements Comparable<Servant> {
 
     private Double lastServiceEndTime;
-
 
 
     private Double idleTime;
@@ -25,15 +26,15 @@ public class Servant extends Component implements Comparable<Servant> {
     }
 
     @Override
-    public String getStatistics() {
-        return "(" + getName() + " - " + idleTime + ")";
+    public String getStatistics(Double endOfSimulationTime) {
+        return "(" + getName() + " - " + Utils.formatDouble(getIdleTime(endOfSimulationTime)) + ")";
     }
 
     public Double getLastServiceEndTime() {
         return lastServiceEndTime;
     }
 
-    public Double getIdleTime() {
-        return idleTime;
+    public Double getIdleTime(Double endOfSimulationTime) {
+        return idleTime + endOfSimulationTime - lastServiceEndTime;
     }
 }

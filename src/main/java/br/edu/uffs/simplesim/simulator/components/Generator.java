@@ -41,7 +41,7 @@ public class Generator extends Component {
     }
 
     @Override
-    public String getStatistics() {
+    public String getStatistics(Double endOfSimulationTime) {
         return "TODO";
     }
 }

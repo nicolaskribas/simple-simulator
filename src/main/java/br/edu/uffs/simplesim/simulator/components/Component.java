@@ -12,5 +12,5 @@ public abstract class Component {
         this.name = name;
     }
 
-    public abstract String getStatistics();
+    public abstract String getStatistics(Double endOfSimulationTime);
 }

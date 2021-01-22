@@ -12,7 +12,7 @@ public class Configuration {
     private List<ServiceCenterConfiguration> serviceCentersConfigurations;
     private List<RouterConfiguration> routersConfigurations;
     private List<ExitConfiguration> exitsConfigurations;
-    private Integer maxSimulationTime;
+    private Double maxSimulationTime;
 
     public List<GeneratorConfiguration> getGeneratorsConfigurations() {
         return generatorsConfigurations;
@@ -46,11 +46,11 @@ public class Configuration {
         this.exitsConfigurations = exitsConfigurations;
     }
 
-    public Integer getMaxSimulationTime() {
+    public Double getMaxSimulationTime() {
         return maxSimulationTime;
     }
 
-    public void setMaxSimulationTime(Integer maxSimulationTime) {
+    public void setMaxSimulationTime(Double maxSimulationTime) {
         this.maxSimulationTime = maxSimulationTime;
     }
 }

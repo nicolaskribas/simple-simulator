@@ -10,8 +10,8 @@ import br.edu.uffs.simplesim.simulator.configurationbeans.*;
 import java.util.*;
 
 public class Simulator {
-    private final Integer maxSimulationTime;
-    private final Queue<Event> eventsQueue = new PriorityQueue<>();
+    private final Double maxSimulationTime;
+    private final List<EventExecutor> eventExecutorsQueue = new ArrayList<>();
 
     private final List<Generator> generators;
     private final List<ServiceCenter> serviceCenters;
@@ -29,9 +29,12 @@ public class Simulator {
         exits = createTemporaryUnitExits(configuration.getExitsConfigurations());
 
         eventExecutorsMapping = new TreeMap<>();
-        for (ServiceCenter serviceCenter : serviceCenters) eventExecutorsMapping.put(serviceCenter.getName(), serviceCenter);
-        for (Router router : routers) eventExecutorsMapping.put(router.getName(), router);
-        for (Exit exit : exits) eventExecutorsMapping.put(exit.getName(), exit);
+        for (ServiceCenter serviceCenter : serviceCenters)
+            eventExecutorsMapping.put(serviceCenter.getName(), serviceCenter);
+        for (Router router : routers)
+            eventExecutorsMapping.put(router.getName(), router);
+        for (Exit exit : exits)
+            eventExecutorsMapping.put(exit.getName(), exit);
     }
 
     private List<Exit> createTemporaryUnitExits(List<ExitConfiguration> temporaryUnitExitsConfigurations) {
@@ -68,38 +71,56 @@ public class Simulator {
 
     public void simulate() {
         generateTemporaryUnitsEvents();
-        while (!eventsQueue.isEmpty()) {
+        while (!eventExecutorsQueue.isEmpty()) {
             executeNextEvent();
         }
     }
 
     private void executeNextEvent() {
-        Event event = eventsQueue.poll();
-        Optional<Event> resultEvent = executeEvent(event);
-        if (resultEvent.isPresent()) queuesEventIfItIsAfterMaxSimulationTime(resultEvent.get());
+        EventExecutor eventExecutor = eventExecutorsQueue.remove(0);
+
+        Optional<Event> resultEvent = eventExecutor.executeNextEvent();
+        if (resultEvent.isPresent()) enqueueEventIfItIsAfterMaxSimulationTime(resultEvent.get());
+
+        if (eventExecutor.hasEventsLeftInTheQueue())
+            eventExecutorsQueue.add(eventExecutor);
+
+        Collections.sort(eventExecutorsQueue);
     }
 
-    private Optional<Event> executeEvent(Event event) {
+    private void enqueueEventIfItIsAfterMaxSimulationTime(Event event) {
+        if (event.getTime() < maxSimulationTime) {
+            enqueueEvent(event);
+        }
+    }
+
+    private void enqueueEvent(Event event) {
         String eventExecutorInChargeName = event.getEventExecutorInChargeName();
-        EventExecutor eventExecutorInCharge = eventExecutorsMapping.get(eventExecutorInChargeName);
-        return eventExecutorInCharge.execute(event);
-    }
+        EventExecutor executorInCharge = eventExecutorsMapping.get(eventExecutorInChargeName);
 
-    private void queuesEventIfItIsAfterMaxSimulationTime(Event event) {
-        if (event.getTime() < maxSimulationTime) eventsQueue.add(event);
+        if (executorInCharge.hasNoEventsLeftInTheQueue()) {
+            executorInCharge.enqueueEvent(event);
+            eventExecutorsQueue.add(executorInCharge);
+        } else {
+            executorInCharge.enqueueEvent(event);
+        }
+        Collections.sort(eventExecutorsQueue);
     }
 
     private void generateTemporaryUnitsEvents() {
         for (Generator generator : generators) {
-            eventsQueue.addAll(generator.generateArrivalEvents());
+            for (Event event : generator.generateArrivalEvents()) {
+                enqueueEvent(event);
+            }
         }
     }
 
     public String getStatisticsAsString() {
         String statistics = "";
 
-        for (ServiceCenter serviceCenter : serviceCenters) statistics += serviceCenter.getStatistics() + '\n';
-        for (Exit exit: exits) statistics += exit.getStatistics() + '\n';
+        for (ServiceCenter serviceCenter : serviceCenters)
+            statistics += serviceCenter.getStatistics(maxSimulationTime) + '\n';
+        for (Exit exit : exits) statistics += exit.getStatistics(maxSimulationTime) + '\n';
 
         return statistics;
     }

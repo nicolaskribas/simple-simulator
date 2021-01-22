@@ -3,7 +3,7 @@ package br.edu.uffs.simplesim.simulator.components;
 public class TemporaryEntity {
 
     private int id;
-    private Double arrivalTime;
+    private final Double arrivalTime;
 
     public TemporaryEntity(int id, Double arrivalTime) {
         this.arrivalTime = arrivalTime;
@@ -22,9 +22,6 @@ public class TemporaryEntity {
         return arrivalTime;
     }
 
-    public void setArrivalTime(Double arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
 
 
 

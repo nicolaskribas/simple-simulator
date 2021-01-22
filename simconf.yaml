@@ -2,7 +2,7 @@ generatorsConfigurations:
   - name: entrada
     samples: [157, 94, 150, 413, 95, 101, 56, 352, 230, 323, 16, 311, 98, 467, 330, 277, 457, 3, 276, 285, 246, 160, 390, 230, 64, 233, 181, 316, 325, 271]
     numberOfClasses: 10
-    numberOfTemporaryUnitsToGenerate: 60
+    numberOfTemporaryUnitsToGenerate: 50
     nextComponentName: recepcao
 
 serviceCentersConfigurations:
@@ -30,4 +30,4 @@ routersConfigurations:
 exitsConfigurations:
   - name: saida
 
-maxSimulationTime: 30000000
+maxSimulationTime: 480
